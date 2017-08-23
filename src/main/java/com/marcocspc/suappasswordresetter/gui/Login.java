@@ -46,9 +46,21 @@ public class Login extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
 
+        campoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoUsuarioActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("Matrícula:");
 
         jLabel2.setText("Senha:");
+
+        campoSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoSenhaActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -112,25 +124,16 @@ public class Login extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (campoUsuario.equals("") || campoSenha.equals("")) {
-            JOptionPane.showMessageDialog(this, "Campos matrícula ou senha não devem estar vazios.");
-        } else {
-            JOptionPane.showMessageDialog(this, "O login é demorado, aguarde.\n"
-                    + "Aperte OK para continuar.");
-            Servidor servidor = new Servidor(campoUsuario.getText(), String.valueOf(campoSenha.getPassword()));
-            Suap s = new Suap(servidor);
-
-            try {
-                if (s.verificarCredenciais()) {
-                    this.setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Credenciais inválidas.");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
-        }
+        this.logar();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void campoSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoSenhaActionPerformed
+        this.logar();
+    }//GEN-LAST:event_campoSenhaActionPerformed
+
+    private void campoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoUsuarioActionPerformed
+        this.logar();
+    }//GEN-LAST:event_campoUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,6 +208,27 @@ public class Login extends javax.swing.JDialog {
 
     public void setCampoUsuario(JTextField campoUsuario) {
         this.campoUsuario = campoUsuario;
+    }
+    
+    private void logar() {
+        if (campoUsuario.equals("") || campoSenha.equals("")) {
+            JOptionPane.showMessageDialog(this, "Campos matrícula ou senha não devem estar vazios.");
+        } else {
+            JOptionPane.showMessageDialog(this, "O login é demorado, aguarde.\n"
+                    + "Aperte OK para continuar.");
+            Servidor servidor = new Servidor(campoUsuario.getText(), String.valueOf(campoSenha.getPassword()));
+            Suap s = new Suap(servidor);
+
+            try {
+                if (s.verificarCredenciais()) {
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Credenciais inválidas.");
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
     }
 
 }

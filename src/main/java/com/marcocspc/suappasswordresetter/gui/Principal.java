@@ -54,6 +54,7 @@ public class Principal extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        campoSenha2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,6 +140,16 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        campoSenha2.setText("Repita a senha");
+        campoSenha2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                campoSenha2FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                campoSenha2FocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,14 +164,17 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(campoArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
-                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(campoMatriculas)
-                            .addComponent(campoSenhaPadrao)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(campoSenha2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(campoMatriculas, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(campoSenhaPadrao, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -193,10 +207,12 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(campoSenhaPadrao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(campoSenha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton6)
+                    .addComponent(jButton5))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         pack();
@@ -248,6 +264,7 @@ public class Principal extends javax.swing.JFrame {
         String senha = "Ifrn." + s.format(d);
 
         campoSenhaPadrao.setText(senha);
+        campoSenha2.setText(senha);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -263,18 +280,23 @@ public class Principal extends javax.swing.JFrame {
         Suap s = new Suap(servidor);
 
         if (!campoSenhaPadrao.getText().equals("")) {
-            DefaultListModel<String> dlm = (DefaultListModel<String>) listaMatriculas.getModel();
-            try {
-                String matr;
-                for (int x = 0; x < dlm.size(); x++) {
-                    matr = dlm.get(x);
-                    s.redefinirSenha(matr, campoSenhaPadrao.getText());
+            if (campoSenhaPadrao.getText().equals(campoSenha2.getText())) {
+                DefaultListModel<String> dlm = (DefaultListModel<String>) listaMatriculas.getModel();
+                try {
+                    String matr;
+                    for (int x = 0; x < dlm.size(); x++) {
+                        matr = dlm.get(x);
+                        s.redefinirSenha(matr, campoSenhaPadrao.getText());
+                    }
+
+                    JOptionPane.showMessageDialog(this, "Senhas redefinidas!");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
                 }
-                
-                JOptionPane.showMessageDialog(this, "Senhas redefinidas!");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
+            } else {
+                JOptionPane.showMessageDialog(this, "As duas senhas não são iguais.");
             }
+
         } else {
             JOptionPane.showMessageDialog(this, "A senha padrão não pode estar vazia!");
         }
@@ -296,23 +318,24 @@ public class Principal extends javax.swing.JFrame {
 
             LinkedList<String> lista = new LinkedList<String>();
             String line = "";
-            
+
             while ((line = reader.readLine()) != null) {
                 lista.add(line);
             }
-            
+
             reader.close();
-            
+
             DefaultListModel dlm = (DefaultListModel) listaMatriculas.getModel();
-            
+
             for (String linha : lista) {
                 dlm.addElement(line);
             }
-            
+
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (IOException ex2) {
             JOptionPane.showMessageDialog(this, ex2.getMessage());
+        } catch (NullPointerException ex3) {         
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -320,6 +343,18 @@ public class Principal extends javax.swing.JFrame {
     private void campoMatriculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoMatriculasActionPerformed
         this.adicionarMatriculaNaLista();
     }//GEN-LAST:event_campoMatriculasActionPerformed
+
+    private void campoSenha2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenha2FocusGained
+        if (campoSenha2.getText().equals("Repita a senha")) {
+            campoSenha2.setText("");
+        }
+    }//GEN-LAST:event_campoSenha2FocusGained
+
+    private void campoSenha2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenha2FocusLost
+        if (campoSenha2.getText().equals("")) {
+            campoSenha2.setText("Repita a senha");
+        }
+    }//GEN-LAST:event_campoSenha2FocusLost
 
     /**
      * @param args the command line arguments
@@ -359,6 +394,7 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField campoArquivo;
     private javax.swing.JTextField campoMatriculas;
+    private javax.swing.JTextField campoSenha2;
     private javax.swing.JTextField campoSenhaPadrao;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -381,7 +417,7 @@ public class Principal extends javax.swing.JFrame {
         this.servidor = servidor;
     }
 
-    private void adicionarMatriculaNaLista () {
+    private void adicionarMatriculaNaLista() {
         DefaultListModel dlm = (DefaultListModel) listaMatriculas.getModel();
 
         if (!campoMatriculas.getText().equals("") && campoMatriculas.getText().matches("[0-9]+")) {
