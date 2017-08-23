@@ -10,7 +10,6 @@ import com.marcocspc.suappasswordresetter.gui.Principal;
 import com.marcocspc.suappasswordresetter.suap.Servidor;
 import com.marcocspc.suappasswordresetter.suap.Suap;
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Scanner;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 /**
