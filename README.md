@@ -23,9 +23,9 @@ java -jar SUAPPasswordResetter_VERSAO.jar --no-gui --user <matricula> --file <ar
 ```
 
 Sendo:
-<matricula> é o número da matrícula do servidor que possui permissão de redefinir
+'matricula' é o número da matrícula do servidor que possui permissão de redefinir
 as senhas. A senha será solicitada via terminal.
-<arquivo> é o arquivo contendo todas as matrículas a serem redefinidas, separadas
+'arquivo' é o arquivo contendo todas as matrículas a serem redefinidas, separadas
 por quebras de linha. Em outras palavras, uma matrícula por linha.
 
 ### Argumentos opcionais no modo linha de comando
