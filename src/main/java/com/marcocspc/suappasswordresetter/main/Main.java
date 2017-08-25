@@ -125,7 +125,7 @@ public class Main {
             }
 
         } else {
-            System.out.println("Executando em modo de interface gráfica.\n"
+            System.out.println("Executando em modo GUI.\n"
                     + "Se deseja usar o modo de linha de comando, use '--no-gui'.");
 
             JOptionPane.showMessageDialog(null, "Você precisa fazer login no SUAP para poder continuar.", "Atenção", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Toolkit.getDefaultToolkit().getImage("icon/64.png")));
