@@ -10,14 +10,17 @@ import java.util.Date;
 import javax.swing.DefaultListModel;
 import com.marcocspc.suappasswordresetter.suap.Servidor;
 import com.marcocspc.suappasswordresetter.suap.Suap;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -30,6 +33,13 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+        
+        icone = new ImageIcon(Toolkit.getDefaultToolkit().getImage("icon/64.png"));
+        this.setIconImage(icone.getImage());
+        if (checkBoxSenha.isSelected()) {
+            campoSenhaPadrao.setEchoChar((char) 0);
+            campoSenha2.setEchoChar((char) 0);
+        }
     }
 
     /**
@@ -50,11 +60,12 @@ public class Principal extends javax.swing.JFrame {
         campoMatriculas = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        campoSenhaPadrao = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        campoSenha2 = new javax.swing.JTextField();
+        campoSenha2 = new javax.swing.JPasswordField();
+        campoSenhaPadrao = new javax.swing.JPasswordField();
+        checkBoxSenha = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,16 +120,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        campoSenhaPadrao.setText("Insira uma senha padrão");
-        campoSenhaPadrao.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                campoSenhaPadraoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                campoSenhaPadraoFocusLost(evt);
-            }
-        });
-
         jButton4.setText("Gerar senha padrão");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,13 +141,23 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        campoSenha2.setText("Repita a senha");
         campoSenha2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 campoSenha2FocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                campoSenha2FocusLost(evt);
+        });
+
+        campoSenhaPadrao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                campoSenhaPadraoFocusGained(evt);
+            }
+        });
+
+        checkBoxSenha.setSelected(true);
+        checkBoxSenha.setText("Mostrar Senha");
+        checkBoxSenha.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                checkBoxSenhaStateChanged(evt);
             }
         });
 
@@ -168,13 +179,13 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(campoSenha2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(campoMatriculas, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(campoSenha2)
+                            .addComponent(campoMatriculas)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(campoSenhaPadrao, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(campoSenhaPadrao))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -182,7 +193,8 @@ public class Principal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jButton4)
-                            .addComponent(jButton6))))
+                            .addComponent(jButton6)
+                            .addComponent(checkBoxSenha))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -204,15 +216,17 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoSenhaPadrao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(jButton4)
+                    .addComponent(campoSenhaPadrao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(campoSenha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoSenha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkBoxSenha))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
                     .addComponent(jButton5))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -246,18 +260,6 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_campoMatriculasFocusLost
 
-    private void campoSenhaPadraoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenhaPadraoFocusGained
-        if (campoSenhaPadrao.getText().equals("Insira uma senha padrão")) {
-            campoSenhaPadrao.setText("");
-        }
-    }//GEN-LAST:event_campoSenhaPadraoFocusGained
-
-    private void campoSenhaPadraoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenhaPadraoFocusLost
-        if (campoSenhaPadrao.getText().equals("")) {
-            campoSenhaPadrao.setText("Insira uma senha padrão");
-        }
-    }//GEN-LAST:event_campoSenhaPadraoFocusLost
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         Date d = new Date();
         SimpleDateFormat s = new SimpleDateFormat("YYYY");
@@ -272,34 +274,46 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        JOptionPane.showMessageDialog(this, "Atenção! As senhas começarão a ser redefinidas.\n"
+        JOptionPane.showMessageDialog(Principal.this, "As senhas começarão a ser redefinidas.\n"
                 + "A aplicação poderá congelar durante o processo devido a uma limitação da biblioteca HTMLUnit.\n"
                 + "Porém este é um comportamento normal e é muito importante que não encerre a aplicação durante o processo.\n"
-                + "Aperte em OK para continuar.");
+                + "Aperte em OK para continuar.", "Atenção", JOptionPane.INFORMATION_MESSAGE, icone);
 
-        Suap s = new Suap(servidor);
+        Aguarde a = new Aguarde(this, false);
+        a.setVisible(true);
 
-        if (!campoSenhaPadrao.getText().equals("")) {
-            if (campoSenhaPadrao.getText().equals(campoSenha2.getText())) {
-                DefaultListModel<String> dlm = (DefaultListModel<String>) listaMatriculas.getModel();
-                try {
-                    String matr;
-                    for (int x = 0; x < dlm.size(); x++) {
-                        matr = dlm.get(x);
-                        s.redefinirSenha(matr, campoSenhaPadrao.getText());
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Suap s = new Suap(servidor);
+
+                if (!campoSenhaPadrao.getText().equals("")) {
+                    if (campoSenhaPadrao.getText().equals(campoSenha2.getText())) {
+                        DefaultListModel<String> dlm = (DefaultListModel<String>) listaMatriculas.getModel();
+                        
+                        try {
+                            String matr;
+                            for (int x = 0; x < dlm.size(); x++) {
+                                matr = dlm.get(x);
+                                s.redefinirSenha(matr, campoSenhaPadrao.getText());
+                            }
+                            
+                            a.setVisible(false);
+
+                            JOptionPane.showMessageDialog(Principal.this, "Senhas redefinidas.", "Atenção", JOptionPane.INFORMATION_MESSAGE, icone);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(Principal.this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE, icone);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(Principal.this, "As duas senhas não são iguais.", "Atenção", JOptionPane.INFORMATION_MESSAGE, icone);
                     }
 
-                    JOptionPane.showMessageDialog(this, "Senhas redefinidas!");
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                } else {
+                    JOptionPane.showMessageDialog(Principal.this, "A senha padrão não pode estar vazia.", "Atenção", JOptionPane.INFORMATION_MESSAGE, icone);
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "As duas senhas não são iguais.");
             }
+        });
 
-        } else {
-            JOptionPane.showMessageDialog(this, "A senha padrão não pode estar vazia!");
-        }
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -332,10 +346,10 @@ public class Principal extends javax.swing.JFrame {
             }
 
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+            JOptionPane.showMessageDialog(Principal.this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE, icone);
         } catch (IOException ex2) {
-            JOptionPane.showMessageDialog(this, ex2.getMessage());
-        } catch (NullPointerException ex3) {         
+            JOptionPane.showMessageDialog(Principal.this, ex2.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE, icone);
+        } catch (NullPointerException ex3) {
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -344,17 +358,23 @@ public class Principal extends javax.swing.JFrame {
         this.adicionarMatriculaNaLista();
     }//GEN-LAST:event_campoMatriculasActionPerformed
 
+    private void campoSenhaPadraoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenhaPadraoFocusGained
+        campoSenhaPadrao.selectAll();
+    }//GEN-LAST:event_campoSenhaPadraoFocusGained
+
     private void campoSenha2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenha2FocusGained
-        if (campoSenha2.getText().equals("Repita a senha")) {
-            campoSenha2.setText("");
-        }
+        campoSenha2.selectAll();
     }//GEN-LAST:event_campoSenha2FocusGained
 
-    private void campoSenha2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoSenha2FocusLost
-        if (campoSenha2.getText().equals("")) {
-            campoSenha2.setText("Repita a senha");
+    private void checkBoxSenhaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkBoxSenhaStateChanged
+        if (checkBoxSenha.isSelected()) {
+            campoSenhaPadrao.setEchoChar((char) 0);
+            campoSenha2.setEchoChar((char) 0);
+        } else {
+            campoSenhaPadrao.setEchoChar('*');
+            campoSenha2.setEchoChar('*');
         }
-    }//GEN-LAST:event_campoSenha2FocusLost
+    }//GEN-LAST:event_checkBoxSenhaStateChanged
 
     /**
      * @param args the command line arguments
@@ -394,8 +414,9 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField campoArquivo;
     private javax.swing.JTextField campoMatriculas;
-    private javax.swing.JTextField campoSenha2;
-    private javax.swing.JTextField campoSenhaPadrao;
+    private javax.swing.JPasswordField campoSenha2;
+    private javax.swing.JPasswordField campoSenhaPadrao;
+    private javax.swing.JCheckBox checkBoxSenha;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -408,6 +429,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JList<String> listaMatriculas;
     // End of variables declaration//GEN-END:variables
     private Servidor servidor;
+    private ImageIcon icone;
 
     public Servidor getServidor() {
         return servidor;
@@ -424,7 +446,7 @@ public class Principal extends javax.swing.JFrame {
             dlm.addElement(campoMatriculas.getText());
             campoMatriculas.setText("");
         } else {
-            JOptionPane.showMessageDialog(this, "Somente números.");
+            JOptionPane.showMessageDialog(Principal.this, "Somente números.", "Atenção", JOptionPane.DEFAULT_OPTION, icone);
         }
     }
 }

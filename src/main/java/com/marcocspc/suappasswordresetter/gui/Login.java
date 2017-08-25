@@ -7,11 +7,12 @@ package com.marcocspc.suappasswordresetter.gui;
 
 import com.marcocspc.suappasswordresetter.suap.Servidor;
 import com.marcocspc.suappasswordresetter.suap.Suap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -209,25 +210,35 @@ public class Login extends javax.swing.JDialog {
     public void setCampoUsuario(JTextField campoUsuario) {
         this.campoUsuario = campoUsuario;
     }
-    
+
     private void logar() {
         if (campoUsuario.equals("") || campoSenha.equals("")) {
-            JOptionPane.showMessageDialog(this, "Campos matrícula ou senha não devem estar vazios.");
+            JOptionPane.showMessageDialog(null, "Campos matrícula ou senha não devem estar vazios.", "Atenção", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Toolkit.getDefaultToolkit().getImage("icon/64.png")));
         } else {
-            JOptionPane.showMessageDialog(this, "O login é demorado, aguarde.\n"
-                    + "Aperte OK para continuar.");
-            Servidor servidor = new Servidor(campoUsuario.getText(), String.valueOf(campoSenha.getPassword()));
-            Suap s = new Suap(servidor);
+            Aguarde a = new Aguarde(null, false);
+            a.setAlwaysOnTop(true);
+            a.setVisible(true);
 
-            try {
-                if (s.verificarCredenciais()) {
-                    this.setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Credenciais inválidas.");
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    Servidor servidor = new Servidor(campoUsuario.getText(), String.valueOf(campoSenha.getPassword()));
+                    Suap s = new Suap(servidor);
+
+                    try {
+                        if (s.verificarCredenciais()) {
+                            setVisible(false);
+                            a.setVisible(false);
+                        } else {
+                            a.setVisible(false);
+                            JOptionPane.showMessageDialog(Login.this, "Credenciais inválidas.");
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(Login.this, ex.getMessage());
+                    }
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
+            });
+
         }
     }
 

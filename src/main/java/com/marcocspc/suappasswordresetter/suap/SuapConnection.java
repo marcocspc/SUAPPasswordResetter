@@ -35,11 +35,12 @@ public class SuapConnection {
 
     public SuapConnection(String matricula, String senha) throws Exception {
 
-        this.removeHtmlUnitWarnings();
-        
+        //this.removeHtmlUnitWarnings();
         
         conn = new WebClient(BrowserVersion.BEST_SUPPORTED);
-        
+        conn.getOptions().setJavaScriptEnabled(false);
+        conn.getOptions().setCssEnabled(false);
+        conn.getOptions().setAppletEnabled(false);
 
         this.matricula = matricula;
         this.senha = senha;

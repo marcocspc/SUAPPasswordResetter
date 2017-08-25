@@ -9,6 +9,7 @@ import com.marcocspc.suappasswordresetter.gui.Login;
 import com.marcocspc.suappasswordresetter.gui.Principal;
 import com.marcocspc.suappasswordresetter.suap.Servidor;
 import com.marcocspc.suappasswordresetter.suap.Suap;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -126,7 +128,7 @@ public class Main {
             System.out.println("Executando em modo de interface gráfica.\n"
                     + "Se deseja usar o modo de linha de comando, use '--no-gui'.");
 
-            JOptionPane.showMessageDialog(null, "Você precisa fazer login no SUAP para poder continuar.");
+            JOptionPane.showMessageDialog(null, "Você precisa fazer login no SUAP para poder continuar.", "Atenção", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Toolkit.getDefaultToolkit().getImage("icon/64.png")));
 
             Login janelaLogin = new Login(null, true);
 
